@@ -2,14 +2,22 @@ from fastmcp import FastMCP, Context
 from .weibo import WeiboCrawler
 from typing import Annotated
 from pydantic import Field
+from pathlib import Path
+import argparse
 import os
-import sys
 
 # Initialize FastMCP server with name "Weibo"
 mcp = FastMCP("Weibo")
 
-# Create an instance of WeiboCrawler for handling Weibo API operations
-crawler = WeiboCrawler()
+# Global crawler instance (initialized in main to handle cookie config first)
+_crawler = None
+
+def get_crawler():
+    """Get or create the WeiboCrawler instance."""
+    global _crawler
+    if _crawler is None:
+        _crawler = WeiboCrawler()
+    return _crawler
 
 @mcp.tool()
 async def search_users(
@@ -24,7 +32,7 @@ async def search_users(
     Returns:
         list[dict]: List of dictionaries containing user information
     """
-    return await crawler.search_users(keyword, limit, page)
+    return await get_crawler().search_users(keyword, limit, page)
 
 @mcp.tool()
 async def get_profile(
@@ -37,7 +45,7 @@ async def get_profile(
     Returns:
         dict: Dictionary containing user profile information
     """
-    return await crawler.get_profile(uid)
+    return await get_crawler().get_profile(uid)
 
 @mcp.tool()
 async def get_feeds(
@@ -51,7 +59,7 @@ async def get_feeds(
     Returns:
         list[dict]: List of dictionaries containing feeds
     """
-    return await crawler.get_feeds(str(uid), limit)
+    return await get_crawler().get_feeds(str(uid), limit)
 
 @mcp.tool()
 async def get_hot_feeds(
@@ -65,7 +73,7 @@ async def get_hot_feeds(
     Returns:
         list[dict]: List of dictionaries containing hot feeds
     """
-    return await crawler.get_hot_feeds(uid, limit)
+    return await get_crawler().get_hot_feeds(uid, limit)
 
 @mcp.tool()
 async def get_trendings(
@@ -78,7 +86,7 @@ async def get_trendings(
     Returns:
         list[dict]: List of dictionaries containing hot search items
     """
-    return await crawler.get_trendings(limit)
+    return await get_crawler().get_trendings(limit)
 
 @mcp.tool()
 async def search_content(
@@ -93,9 +101,9 @@ async def search_content(
     Returns:
         list[dict]: List of dictionaries containing search results
     """
-    return await crawler.search_content(keyword, limit, page)
+    return await get_crawler().search_content(keyword, limit, page)
 
-@mcp.tool()
+@mcp.tool
 async def search_topics(
     ctx: Context, 
     keyword: Annotated[str, Field(description="Search term to find content")], 
@@ -108,7 +116,7 @@ async def search_topics(
     Returns:
         list[dict]: List of dictionaries containing search results
     """
-    return await crawler.search_topics(keyword, limit, page)
+    return await get_crawler().search_topics(keyword, limit, page)
 
 @mcp.tool()
 async def get_followers(
@@ -123,7 +131,7 @@ async def get_followers(
     Returns:
         list[dict]: List of dictionaries containing follower information
     """
-    return await crawler.get_followers(uid, limit, page)
+    return await get_crawler().get_followers(uid, limit, page)
 
 @mcp.tool()
 async def get_fans(
@@ -138,7 +146,7 @@ async def get_fans(
     Returns:
         list[dict]: List of dictionaries containing fan information
     """
-    return await crawler.get_fans(uid, limit, page)
+    return await get_crawler().get_fans(uid, limit, page)
 
 @mcp.tool()
 async def get_comments(
@@ -152,7 +160,7 @@ async def get_comments(
     Returns:
         list[dict]: List of dictionaries containing comments
     """
-    return await crawler.get_comments(feed_id, page)
+    return await get_crawler().get_comments(feed_id, page)
 
 def run_as_streamable_http():
     """
@@ -166,10 +174,30 @@ def run_as_stdio():
 
 def main():
     """
-    Entry point for CLI. Use positional argument: [stdio|http], default is stdio if not provided.
+    Entry point for CLI.
     """
-    mode = sys.argv[1] if len(sys.argv) > 1 else '--stdio'
-    if mode == '--http':
+    parser = argparse.ArgumentParser(description="Weibo MCP Server")
+    parser.add_argument(
+        "--cookie",
+        type=str,
+        help="Weibo cookie string. Will be saved to tests/.env file."
+    )
+    parser.add_argument(
+        "mode",
+        nargs="?",
+        choices=["stdio", "http"],
+        default="stdio",
+        help="Server mode: 'stdio' or 'http' (default: stdio)"
+    )
+    args = parser.parse_args()
+
+    if args.cookie:
+        env_file = Path(__file__).parent / ".env"
+        env_file.write_text(f"WEIBO_COOKIE={args.cookie}\n")
+        print(f"Cookie saved to {env_file}")
+        return
+
+    if args.mode == "http":
         run_as_streamable_http()
     else:
         run_as_stdio()

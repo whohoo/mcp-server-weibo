@@ -1,5 +1,9 @@
 # Default HTTP headers for Weibo API requests
-DEFAULT_HEADERS = { 'Content-Type': 'application/json' }
+DEFAULT_HEADERS = { 
+    'Content-Type': 'application/json', 
+    'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 16_0 like Mac OS X) AppleWebKit/605.1.15',
+    'Referer': 'https://m.weibo.cn/',
+}
 
 # URL template for fetching user profile information
 # {userId} will be replaced with the actual user ID

@@ -10,48 +10,80 @@
 
 ## 安装
 
-* 从源代码安装：
+### 环境变量配置
 
-```json
-{
-  "mcpServers": {
-    "weibo": {
-      "command": "uvx",
-      "args": [
-        "--from",
-        "git+https://github.com/qinyuanpei/mcp-server-weibo.git",
-        "mcp-server-weibo"
-      ]
-    }
-  }
-}
-```
-* 从包管理器安装：
+使用前需要设置 `WEIBO_COOKIE` 环境变量：
 
-```json
-{
-  "mcpServers": {
-    "weibo": {
-      "command": "uvx",
-      "args": ["mcp-server-weibo"],
-    }
-  }
-}
-```
-* 从 Docker 安装，请使用以下命令：
 ```bash
-docker build -t mcp-server-weibo .
-docker run -d --name mcp-server-weibo -p 4200:4200 mcp-server-weibo
+# Linux/macOS
+export WEIBO_COOKIE="你的微博Cookie"
+
+# Windows
+set WEIBO_COOKIE=你的微博Cookie
 ```
-参考配置：
+
+或使用 `--cookie` 参数自动保存到 `.env` 文件：
+
+```bash
+mcp-server-weibo --cookie "你的微博Cookie"
+```
+
+### 方式一：从包管理器安装（推荐）
+
+```bash
+# 安装
+uvx install mcp-server-weibo
+
+# 运行 stdio 模式
+mcp-server-weibo stdio --cookie <Your-Cookie>
+
+# 运行 http 模式
+mcp-server-weibo http --cookie <Your-Cookie>
+```
+
+MCP 客户端配置（stdio 模式）：
 ```json
 {
   "mcpServers": {
     "weibo": {
-      "url": "http://localhost:4200/mcp",
+      "command": "uvx",
+      "args": ["mcp-server-weibo", "--cookie", "<Your-Cookie>"]
     }
   }
 }
+```
+
+### 方式二：从 Docker 安装
+
+```bash
+# 构建镜像
+docker build -t mcp-server-weibo .
+
+# 运行容器（注入 Cookie）
+docker run -e WEIBO_COOKIE="你的微博Cookie" -p 4200:4200 mcp-server-weibo http
+```
+
+MCP 客户端配置（HTTP 模式）：
+```json
+{
+  "mcpServers": {
+    "weibo": {
+      "url": "http://localhost:4200/sse"
+    }
+  }
+}
+```
+
+### 方式三：从源代码安装
+
+```bash
+# 克隆并安装
+git clone https://github.com/qinyuanpei/mcp-server-weibo.git
+cd mcp-server-weibo
+uv pip install -e .
+
+# 运行
+mcp-server-weibo stdio   # 或 http
 ```
 
 

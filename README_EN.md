@@ -10,48 +10,80 @@ Weibo Data API Server powered by Model Context Protocol - Real-time access to We
 
 ## Installation
 
-* From source code:
+### Environment Variable Configuration
 
-```json
-{
-  "mcpServers": {
-    "weibo": {
-      "command": "uvx",
-      "args": [
-        "--from",
-        "git+https://github.com/qinyuanpei/mcp-server-weibo.git",
-        "mcp-server-weibo"
-      ]
-    }
-  }
-}
-```
-* From package manager:
+Before using, you need to set the `WEIBO_COOKIE` environment variable:
 
-```json
-{
-  "mcpServers": {
-    "weibo": {
-      "command": "uvx",
-      "args": ["mcp-server-weibo"]
-    }
-  }
-}
-```
-* From Docker:
 ```bash
-docker build -t mcp-server-weibo .
-docker run -d --name mcp-server-weibo -p 4200:4200 mcp-server-weibo
+# Linux/macOS
+export WEIBO_COOKIE="your_weibo_cookie"
+
+# Windows
+set WEIBO_COOKIE=your_weibo_cookie
 ```
-Reference config:
+
+Or use the `--cookie` argument to automatically save to `.env` file:
+
+```bash
+mcp-server-weibo --cookie "your_weibo_cookie"
+```
+
+### Option 1: From Package Manager (Recommended)
+
+```bash
+# Install
+uvx install mcp-server-weibo
+
+# Run in stdio mode
+mcp-server-weibo stdio --cookie <Your-Cookie>
+
+# Run in http mode
+mcp-server-weibo http --cookie <Your-Cookie>
+```
+
+MCP Client Config (stdio mode):
 ```json
 {
   "mcpServers": {
     "weibo": {
-      "url": "http://localhost:4200/mcp"
+      "command": "uvx",
+      "args": ["mcp-server-weibo", "--cookie", "<Your-Cookie>"]
     }
   }
 }
+```
+
+### Option 2: From Docker
+
+```bash
+# Build image
+docker build -t mcp-server-weibo .
+
+# Run container (inject Cookie)
+docker run -e WEIBO_COOKIE="your_weibo_cookie" -p 4200:4200 mcp-server-weibo http
+```
+
+MCP Client Config (HTTP mode):
+```json
+{
+  "mcpServers": {
+    "weibo": {
+      "url": "http://localhost:4200/sse"
+    }
+  }
+}
+```
+
+### Option 3: From Source
+
+```bash
+# Clone and install
+git clone https://github.com/qinyuanpei/mcp-server-weibo.git
+cd mcp-server-weibo
+uv pip install -e .
+
+# Run
+mcp-server-weibo stdio   # or http
 ```
 
 ## Components

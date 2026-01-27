@@ -17,4 +17,4 @@ EXPOSE 4200
 ENV PORT=4200
 
 # Run the server using the streamable-http mode and allow PORT env override
-CMD ["uvx", "--from", ".", "mcp-server-weibo", "--http"]
+CMD ["uvx", "--from", ".", "mcp-server-weibo", "http"]

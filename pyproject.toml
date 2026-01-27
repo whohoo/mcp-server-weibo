@@ -1,16 +1,28 @@
 [project]
 name = "mcp-server-weibo"
-version = "1.0.7"
+version = "1.0.10"
 description = "A MCP Server for Weibo"
 keywords = ["MCP", "Model Context Protocol", "Weibo", "Python", "Social Networks"]
 readme = "README.md"
 license = {file = "LICENSE"}
 requires-python = ">=3.10"
 dependencies = [
-    "fastmcp",
+    "fastmcp>=2.12.4",
     "httpx",
-    "mcp[cli]",
+    "mcp>=1.17.0",
+    "playwright>=1.57.0",
 ]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-asyncio>=0.21.0",
+]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+python_files = ["test_*.py"]
 
 
 [project.urls]
