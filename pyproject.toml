@@ -1,6 +1,6 @@
 [project]
 name = "mcp-server-weibo"
-version = "1.0.10"
+version = "1.0.11"
 description = "A MCP Server for Weibo"
 keywords = ["MCP", "Model Context Protocol", "Weibo", "Python", "Social Networks"]
 readme = "README.md"
@@ -10,7 +10,6 @@ dependencies = [
     "fastmcp>=2.12.4",
     "httpx",
     "mcp>=1.17.0",
-    "playwright>=1.57.0",
 ]
 
 [project.optional-dependencies]
