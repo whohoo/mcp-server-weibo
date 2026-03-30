@@ -247,7 +247,7 @@ class WeiboCrawler:
                 params={
                     'containerid': f'100103type=1&q={keyword}',
                     'page_type': 'searchall',
-                    'page': page,
+                    'page': current_page,
                 }
                 encoded_params=urlencode(params)
 
