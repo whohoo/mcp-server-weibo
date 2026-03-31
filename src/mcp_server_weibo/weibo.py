@@ -175,7 +175,6 @@ class WeiboCrawler:
 
                 response=await client.get(f'{SEARCH_URL}?{encoded_params}', headers=DEFAULT_HEADERS)
                 result=response.json()
-                print(result)
                 cards=result["data"]["cards"]
                 if len(cards) < 2:
                     return []
@@ -596,27 +595,3 @@ class WeiboCrawler:
             reply_id=item.get('reply_id', None),
             reply_text=item.get('reply_text', ''),
         )
-
-
-if __name__ == "__main__":
-    import asyncio
-    async def test_search_topics():
-        crawler=WeiboCrawler()
-        await crawler.init_cookies()
-        keyword="测试话题"
-        limit=5
-        page=1
-
-        try:
-            results=await crawler.search_users(keyword="云来雁去", limit=5, page=1)
-            print("Search Users Results:")
-            for result in results:
-                print(result)
-            results=await crawler.search_topics(keyword=keyword, limit=limit, page=page)
-            print("Search Topics Results:")
-            for result in results:
-                print(result)
-        except Exception as e:
-            print(f"Error during search_topics test: {e}")
-
-    asyncio.run(test_search_topics())
