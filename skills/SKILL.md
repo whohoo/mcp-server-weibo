@@ -4,44 +4,93 @@
 
 The `weibo-cli` is a command-line interface tool for interacting with Weibo data without using the MCP protocol. It provides direct access to all Weibo functionality through simple terminal commands.
 
-## How It Works
-
-### Architecture
-
-```
-User Terminal
-     |
-     v
-weibo-cli (Click-based CLI)
-     |
-     v
-WeiboCrawler (weibo.py)
-     |
-     v
-Weibo API (m.weibo.cn)
-     |
-     v
-Auto-generated Cookies (Visitor Passport)
-```
-
-### Cookie Auto-Generation
-
-Unlike traditional approaches that require manual cookie configuration, `weibo-cli` uses Weibo's visitor passport system to automatically generate valid access credentials:
-
-1. On first request, `_ensure_cookies()` is called
-2. It makes a request to `https://visitor.passport.weibo.cn/visitor/genvisitor2`
-3. The response contains `SUB` and `SUBP` tokens
-4. These tokens are validated before use
-5. Cookies are stored in the `WeiboCrawler` instance for subsequent requests
-
-### Installation
+## Installation
 
 ```bash
 # Run with uvx (recommended)
 uvx --from mcp-server-weibo weibo-cli --help
 
-# Or install from PyPI
-pip install mcp-server-weibo
+# Or run with uv tool
+uv tool install mcp-server-weibo
+weibo-cli --help
+```
+
+## Workflows
+
+### User-Related Operations
+
+For operations involving users (profile, feeds, followers, fans), you need to first search for the user to get their UID:
+
+```
+1. Search users → Get UID
+       ↓
+2. Use UID for subsequent operations
+```
+
+**Example: Get a specific user's feeds**
+```bash
+# Step 1: Search for user to get UID
+weibo-cli users "雷军" -n 5
+
+# Step 2: Use the UID (1749127163) to get feeds
+weibo-cli feeds 1749127163 -n 10
+```
+
+**Example: Get someone's followers**
+```bash
+# Step 1: Search users
+weibo-cli users "科技博主" -n 5
+
+# Step 2: Use UID to get followers
+weibo-cli followers <UID> -n 20
+```
+
+### Content Search
+
+For searching posts/content by keyword, use the `search` command directly:
+
+```bash
+# Search posts containing keywords
+weibo-cli search "人工智能" -n 20
+```
+
+### Topic Search
+
+For searching hashtags/topics:
+
+```bash
+# Search topics
+weibo-cli topics "演唱会" -n 10
+```
+
+### Trending Hot Searches
+
+Get current trending topics directly:
+
+```bash
+# Get trending hot searches
+weibo-cli trending -n 15
+```
+
+### Comments
+
+Getting comments requires a `feed_id`, which can be obtained from feed results:
+
+```
+1. Search users → Get UID
+       ↓
+2. Get feeds → Get feed IDs
+       ↓
+3. Use feed_id to get comments
+```
+
+**Example: Get comments on a specific post**
+```bash
+# Step 1: Get the user's feeds
+weibo-cli feeds 1749127163 -n 10
+
+# Step 2: Use the feed id from results to get comments
+weibo-cli comments <FEED_ID> -p 1
 ```
 
 ## CLI Commands
@@ -199,10 +248,11 @@ All errors are logged to stderr and displayed as error messages. The CLI will ex
 
 ## Tips
 
-1. **Pagination**: Use `-p` option to navigate through multiple pages of results
-2. **Result Limits**: Use `-n` option to control how many results to fetch
-3. **JSON Output**: All results are output as formatted JSON for easy parsing
-4. **Async Operations**: Each command runs asynchronously, so multiple commands can be executed in sequence
+1. **User Operations**: Always start with `users` to get the UID before using `profile`, `feeds`, `followers`, or `fans`
+2. **Comments**: Get `feed_id` from `feeds` results before using `comments`
+3. **Pagination**: Use `-p` option to navigate through multiple pages of results
+4. **Result Limits**: Use `-n` option to control how many results to fetch
+5. **JSON Output**: All results are output as formatted JSON for easy parsing
 
 ## See Also
 
