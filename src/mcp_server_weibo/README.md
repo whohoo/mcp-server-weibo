@@ -40,38 +40,39 @@
 除了 MCP 服务器，还提供了独立的命令行工具可直接访问：
 
 ```bash
-# 安装
-pip install -e .
+# 使用 uvx 运行 (推荐)
+uvx --from mcp-server-weibo weibo-cli --help
 
-# 查看帮助
+# 安装后运行
+pip install mcp-server-weibo
 weibo-cli --help
 
 # 获取用户资料
-weibo-cli profile 1749127163
+uvx --from mcp-server-weibo weibo-cli profile 1749127163
 
 # 获取用户动态
-weibo-cli feeds 1749127163 -n 10
+uvx --from mcp-server-weibo weibo-cli feeds 1749127163 -n 10
 
 # 搜索内容
-weibo-cli search "关键词"
+uvx --from mcp-server-weibo weibo-cli search "关键词"
 
 # 搜索用户
-weibo-cli users "关键词"
+uvx --from mcp-server-weibo weibo-cli users "关键词"
 
 # 搜索话题
-weibo-cli topics "关键词"
+uvx --from mcp-server-weibo weibo-cli topics "关键词"
 
 # 获取热搜榜单
-weibo-cli trending -n 10
+uvx --from mcp-server-weibo weibo-cli trending -n 10
 
 # 获取评论
-weibo-cli comments 5173507416919189
+uvx --from mcp-server-weibo weibo-cli comments 5173507416919189
 
 # 获取粉丝
-weibo-cli followers 1749127163 -n 10
+uvx --from mcp-server-weibo weibo-cli followers 1749127163 -n 10
 
 # 获取关注
-weibo-cli fans 1749127163 -n 10
+uvx --from mcp-server-weibo weibo-cli fans 1749127163 -n 10
 ```
 
 ### CLI 命令列表

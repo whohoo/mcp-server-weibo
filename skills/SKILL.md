@@ -37,8 +37,8 @@ Unlike traditional approaches that require manual cookie configuration, `weibo-c
 ### Installation
 
 ```bash
-# Run directly with uvx (recommended)
-uvx weibo-cli --help
+# Run with uvx (recommended)
+uvx --from mcp-server-weibo weibo-cli --help
 
 # Or install from PyPI
 pip install mcp-server-weibo

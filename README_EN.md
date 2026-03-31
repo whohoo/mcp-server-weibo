@@ -75,38 +75,39 @@ mcp-server-weibo stdio   # or http
 A standalone CLI tool is also available for direct command line access:
 
 ```bash
-# Install
-pip install -e .
+# Run with uvx (recommended)
+uvx --from mcp-server-weibo weibo-cli --help
 
-# Show help
+# Install and run
+pip install mcp-server-weibo
 weibo-cli --help
 
 # Get user profile
-weibo-cli profile 1749127163
+uvx --from mcp-server-weibo weibo-cli profile 1749127163
 
 # Get user feeds
-weibo-cli feeds 1749127163 -n 10
+uvx --from mcp-server-weibo weibo-cli feeds 1749127163 -n 10
 
 # Search content
-weibo-cli search "关键词"
+uvx --from mcp-server-weibo weibo-cli search "keyword"
 
 # Search users
-weibo-cli users "关键词"
+uvx --from mcp-server-weibo weibo-cli users "keyword"
 
 # Search topics
-weibo-cli topics "关键词"
+uvx --from mcp-server-weibo weibo-cli topics "keyword"
 
 # Get trending hot searches
-weibo-cli trending -n 10
+uvx --from mcp-server-weibo weibo-cli trending -n 10
 
 # Get comments
-weibo-cli comments 5173507416919189
+uvx --from mcp-server-weibo weibo-cli comments 5173507416919189
 
 # Get followers
-weibo-cli followers 1749127163 -n 10
+uvx --from mcp-server-weibo weibo-cli followers 1749127163 -n 10
 
 # Get fans
-weibo-cli fans 1749127163 -n 10
+uvx --from mcp-server-weibo weibo-cli fans 1749127163 -n 10
 ```
 
 ### CLI Commands
