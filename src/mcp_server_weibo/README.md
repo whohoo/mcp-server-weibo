@@ -4,6 +4,8 @@
 
 ## 安装
 
+**Cookie 自动获取：** 无需手动配置 Cookie，程序会自动通过微博访客通行证生成有效的访问凭证。
+
 从源代码安装：
 
 ```json
@@ -32,6 +34,59 @@
     }
 }
 ```
+
+## 命令行工具 (CLI)
+
+除了 MCP 服务器，还提供了独立的命令行工具可直接访问：
+
+```bash
+# 安装
+pip install -e .
+
+# 查看帮助
+weibo-cli --help
+
+# 获取用户资料
+weibo-cli profile 1749127163
+
+# 获取用户动态
+weibo-cli feeds 1749127163 -n 10
+
+# 搜索内容
+weibo-cli search "关键词"
+
+# 搜索用户
+weibo-cli users "关键词"
+
+# 搜索话题
+weibo-cli topics "关键词"
+
+# 获取热搜榜单
+weibo-cli trending -n 10
+
+# 获取评论
+weibo-cli comments 5173507416919189
+
+# 获取粉丝
+weibo-cli followers 1749127163 -n 10
+
+# 获取关注
+weibo-cli fans 1749127163 -n 10
+```
+
+### CLI 命令列表
+
+| 命令 | 说明 |
+|------|------|
+| `weibo-cli profile <uid>` | 根据 UID 获取用户资料 |
+| `weibo-cli feeds <uid> [-n N]` | 获取用户动态 |
+| `weibo-cli search <关键词> [-n N] [-p P]` | 按关键词搜索帖子 |
+| `weibo-cli users <关键词> [-n N] [-p P]` | 按关键词搜索用户 |
+| `weibo-cli topics <关键词> [-n N] [-p P]` | 按关键词搜索话题 |
+| `weibo-cli trending [-n N]` | 获取热搜榜单 |
+| `weibo-cli comments <feed_id> [-p P]` | 获取帖子评论 |
+| `weibo-cli followers <uid> [-n N] [-p P]` | 获取用户粉丝 |
+| `weibo-cli fans <uid> [-n N] [-p P]` | 获取用户关注 |
 
 ## 组件
 

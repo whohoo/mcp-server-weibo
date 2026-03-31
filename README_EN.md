@@ -10,23 +10,7 @@ Weibo Data API Server powered by Model Context Protocol - Real-time access to We
 
 ## Installation
 
-### Environment Variable Configuration
-
-Before using, you need to set the `WEIBO_COOKIE` environment variable:
-
-```bash
-# Linux/macOS
-export WEIBO_COOKIE="your_weibo_cookie"
-
-# Windows
-set WEIBO_COOKIE=your_weibo_cookie
-```
-
-Or use the `--cookie` argument to automatically save to `.env` file:
-
-```bash
-mcp-server-weibo --cookie "your_weibo_cookie"
-```
+**Automatic Cookie Generation:** No manual cookie configuration required. The server automatically generates valid access credentials through Weibo's visitor passport system.
 
 ### Option 1: From Package Manager (Recommended)
 
@@ -35,10 +19,10 @@ mcp-server-weibo --cookie "your_weibo_cookie"
 uvx install mcp-server-weibo
 
 # Run in stdio mode
-mcp-server-weibo stdio --cookie <Your-Cookie>
+mcp-server-weibo stdio
 
 # Run in http mode
-mcp-server-weibo http --cookie <Your-Cookie>
+mcp-server-weibo http
 ```
 
 MCP Client Config (stdio mode):
@@ -47,7 +31,7 @@ MCP Client Config (stdio mode):
   "mcpServers": {
     "weibo": {
       "command": "uvx",
-      "args": ["mcp-server-weibo", "--cookie", "<Your-Cookie>"]
+      "args": ["mcp-server-weibo"]
     }
   }
 }
@@ -59,8 +43,8 @@ MCP Client Config (stdio mode):
 # Build image
 docker build -t mcp-server-weibo .
 
-# Run container (inject Cookie)
-docker run -e WEIBO_COOKIE="your_weibo_cookie" -p 4200:4200 mcp-server-weibo http
+# Run container
+docker run -p 4200:4200 mcp-server-weibo http
 ```
 
 MCP Client Config (HTTP mode):
@@ -85,6 +69,59 @@ uv pip install -e .
 # Run
 mcp-server-weibo stdio   # or http
 ```
+
+## Command Line Interface (CLI)
+
+A standalone CLI tool is also available for direct command line access:
+
+```bash
+# Install
+pip install -e .
+
+# Show help
+weibo-cli --help
+
+# Get user profile
+weibo-cli profile 1749127163
+
+# Get user feeds
+weibo-cli feeds 1749127163 -n 10
+
+# Search content
+weibo-cli search "关键词"
+
+# Search users
+weibo-cli users "关键词"
+
+# Search topics
+weibo-cli topics "关键词"
+
+# Get trending hot searches
+weibo-cli trending -n 10
+
+# Get comments
+weibo-cli comments 5173507416919189
+
+# Get followers
+weibo-cli followers 1749127163 -n 10
+
+# Get fans
+weibo-cli fans 1749127163 -n 10
+```
+
+### CLI Commands
+
+| Command | Description |
+|---------|-------------|
+| `weibo-cli profile <uid>` | Get user profile by UID |
+| `weibo-cli feeds <uid> [-n N]` | Get user feeds |
+| `weibo-cli search <keyword> [-n N] [-p P]` | Search posts by keyword |
+| `weibo-cli users <keyword> [-n N] [-p P]` | Search users by keyword |
+| `weibo-cli topics <keyword> [-n N] [-p P]` | Search topics by keyword |
+| `weibo-cli trending [-n N]` | Get trending hot searches |
+| `weibo-cli comments <feed_id> [-p P]` | Get comments for a post |
+| `weibo-cli followers <uid> [-n N] [-p P]` | Get user's followers |
+| `weibo-cli fans <uid> [-n N] [-p P]` | Get user's fans |
 
 ## Components
 
