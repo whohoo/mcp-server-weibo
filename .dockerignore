@@ -1,0 +1,9 @@
+.claude/
+.github/
+.skills/
+tests/
+.gitignore
+.python-version
+README.md
+pyproject.toml
+uv.lock

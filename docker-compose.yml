@@ -1,0 +1,8 @@
+---
+services:
+  weibo_mcp:
+    image: whohoo/mcp-server-weibo
+    container_name: mcp-server-weibo
+    restart: unless-stopped
+    ports:
+      - "4200:4200"
