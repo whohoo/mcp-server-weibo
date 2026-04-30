@@ -25,6 +25,8 @@ build/
 
 # Logs
 *.log
+/logs/*
+!/logs/.gitkeep
 
 # Test coverage
 .coverage

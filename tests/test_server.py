@@ -66,7 +66,8 @@ class TestServerTools:
         from mcp_server_weibo.server import mcp
 
         # Get the search_users tool
-        assert "search_users" in mcp._tool_manager._tools
+        tool = await mcp.get_tool("search_users")
+        assert tool is not None
 
     @pytest.mark.asyncio
     async def test_get_profile_returns_dict(self):
@@ -74,7 +75,8 @@ class TestServerTools:
         from mcp_server_weibo.server import mcp
 
         # Get the get_profile tool
-        assert "get_profile" in mcp._tool_manager._tools
+        tool = await mcp.get_tool("get_profile")
+        assert tool is not None
 
     @pytest.mark.asyncio
     async def test_get_feeds_returns_list(self):
@@ -82,7 +84,8 @@ class TestServerTools:
         from mcp_server_weibo.server import mcp
 
         # Get the get_feeds tool
-        assert "get_feeds" in mcp._tool_manager._tools
+        tool = await mcp.get_tool("get_feeds")
+        assert tool is not None
 
     @pytest.mark.asyncio
     async def test_all_tools_registered(self):
@@ -102,10 +105,9 @@ class TestServerTools:
             "get_comments",
         ]
 
-        registered_tools = list(mcp._tool_manager._tools.keys())
-
         for tool_name in expected_tools:
-            assert tool_name in registered_tools, f"Tool {tool_name} not registered"
+            tool = await mcp.get_tool(tool_name)
+            assert tool is not None, f"Tool {tool_name} not registered"
 
     @pytest.mark.asyncio
     async def test_get_crawler_lazy_initialization(self):
