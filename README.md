@@ -1,5 +1,7 @@
 # Weibo MCP Server 🚀
 
+[English](README_EN.md) | [中文](README.md)
+
 基于 Model Context Protocol 的微博数据 API 服务器 - 实时获取微博用户资料、帖子、热搜话题、粉丝/关注数据。支持用户搜索、内容分析和话题发现，适用于 AI 应用。
 
 ## 安装
@@ -35,10 +37,13 @@ MCP 客户端配置（stdio 模式）：
 
 ```bash
 # 构建镜像
-docker build -t mcp-server-weibo .
+docker build -f Dockerfile-alpine -t whohoo/mcp-server-weibo:latest .
 
 # 运行容器
-docker run -p 4200:4200 mcp-server-weibo http
+docker run --rm -p 4200:4200 whohoo/mcp-server-weibo:latest
+
+# 使用 docker-complose 运行
+docker compose up -d
 ```
 
 MCP 客户端配置（HTTP 模式）：
@@ -46,7 +51,7 @@ MCP 客户端配置（HTTP 模式）：
 {
   "mcpServers": {
     "weibo": {
-      "url": "http://localhost:4200/sse"
+      "url": "http://localhost:4200/mcp"
     }
   }
 }
@@ -432,3 +437,32 @@ MIT 许可证 - 详见 [LICENSE](LICENSE) 文件
 ## 免责声明
 
 本项目与微博官方无关，仅用于学习和研究目的。
+
+-----
+此代码来自[qinyuanpei/mcp-server-weibo](https://github.com/qinyuanpei/mcp-server-weibo)
+
+## 改进部分
+
+### 使用 python 3.13.x 版本
+
+### 升级第三方包
+
+1. fastmcp v2.x.x --> fastmcp v3.x.x
+2. mcp
+3. click
+
+### 增加了日志输出
+
+1. 输出目录在当前项目下的logs/
+2. 修改log_config.toml来控制日志输出级别
+3. 当前日志没有滚动删除, 请自行配置linux系统的logrotate
+
+### 生成 docker 镜像已并推送到 [whohoo/mcp_server_weibo](https://hub.docker.com/r/whohoo/mcp-server-weibo)
+
+基于python:alpine 版本, 不额外安装 uv, 直接使用原生 python 命令运行程序
+
+### 其它说明
+
+1. 通过 `uv add`添加第三方库后, 需要使用`uv pip freeze --exclude-editable > requirements.txt`输出, docker 镜像使用requirements.txt来安装依赖库
+2. 本地构建镜像命令`docker build -f Dockerfile-alpine -t whohoo/mcp-server-weibo:latest .`
+3. 进入容器调试命令`docker run -it --rm -p 4200:4200 whohoo/mcp-server-weibo:latest ash`

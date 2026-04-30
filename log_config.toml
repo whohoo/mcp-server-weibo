@@ -12,7 +12,7 @@ disable_existing_loggers = false
 # 1. 日志格式器（Formatter）定义
 # ==============================================
 [formatters.debug]
-class = "src.custom_formatter.CustomFormatter"  # 自定义调试格式器, 已弃用
+class = "custom_formatter.CustomFormatter"  # 自定义调试格式器, 已弃用
 
 [formatters.extra]
 format = "%(asctime)s - %(name)s - %(levelname)s %(message)s - %(filename)s:%(lineno)s"  # 详细格式：时间+名称+级别+信息+文件行号, 已弃用
@@ -21,7 +21,7 @@ format = "%(asctime)s - %(name)s - %(levelname)s %(message)s - %(filename)s:%(li
 format = "[%(name)s] - %(message)s"  # 控制台简洁格式：仅日志名+信息, 主要用于rich.logging.RichHandler
 
 [formatters.plain]
-class = "src.custom_formatter.PlainFormatter"  # 自定义文件格式器, 主要用于 rich markup 输出到文件时去除富文本标记
+class = "custom_formatter.PlainFormatter"  # 自定义文件格式器, 主要用于 rich markup 输出到文件时去除富文本标记
 format = "%(asctime)s - \\[%(name)s] - %(levelname)s - %(message)s \\[@%(filename)s:%(lineno)d]"  # 文件日志标准格式
 
 # ==============================================
@@ -52,8 +52,8 @@ encoding = "utf8"                        # UTF-8 编码
 # ==============================================
 # 3. 第三方库日志级别控制（减少噪音）
 # ==============================================
-[loggers."asyncio"]
-level = "WARNING"                        # 异步事件循环只显示警告
+[loggers."sse_starlette.sse"]
+level = "INFO"                        # 异步事件循环只显示警告
 handlers = ["console", "logfile"]
 propagate = false
 

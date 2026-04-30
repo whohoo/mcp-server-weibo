@@ -7,7 +7,11 @@ COPY requirements.txt .
 RUN pip install --upgrade pip \
  && pip install -r requirements.txt
 
+COPY log_config.toml .
+COPY src/custom_formatter.py .
 COPY src/mcp_server_weibo ./mcp_server_weibo
+
+VOLUME ["/app/logs"]
 
 ENV PYTHONPATH=/app
 

@@ -1,5 +1,7 @@
 # Weibo MCP Server 🚀
 
+[English](README_EN.md) | [中文](README.md)
+
 Weibo Data API Server powered by Model Context Protocol - Real-time access to Weibo user profiles, posts, trending topics, followers/following data. Supports user search, content analysis, and topic discovery for AI applications.
 
 <a href="https://glama.ai/mcp/servers/@qinyuanpei/mcp-server-weibo">
@@ -41,10 +43,13 @@ MCP Client Config (stdio mode):
 
 ```bash
 # Build image
-docker build -t mcp-server-weibo .
+docker build -f Dockerfile-alpine -t whohoo/mcp-server-weibo:latest .
 
 # Run container
-docker run -p 4200:4200 mcp-server-weibo http
+docker run --rm -p 4200:4200 whohoo/mcp-server-weibo:latest
+
+# Run with docker-compose
+docker compose up -d
 ```
 
 MCP Client Config (HTTP mode):
@@ -52,7 +57,7 @@ MCP Client Config (HTTP mode):
 {
   "mcpServers": {
     "weibo": {
-      "url": "http://localhost:4200/sse"
+      "url": "http://localhost:4200/mcp"
     }
   }
 }
@@ -507,3 +512,32 @@ MIT License - See [LICENSE](LICENSE) file for details.
 ## Disclaimer
 
 This project is not affiliated with Weibo and is intended for learning and research purposes only.
+
+-----
+This code originates from [qinyuanpei/mcp-server-weibo](https://github.com/qinyuanpei/mcp-server-weibo)
+
+## Improvements
+
+### Python 3.13.x
+
+### Upgraded Third-Party Packages
+
+1. fastmcp v2.x.x --> fastmcp v3.x.x
+2. mcp
+3. click
+
+### Added Logging
+
+1. Logs are output to `logs/` in the project directory
+2. Modify `log_config.toml` to control log output level
+3. Logs do not rotate automatically; configure Linux `logrotate` as needed
+
+### Docker Image Published to [whohoo/mcp_server_weibo](https://hub.docker.com/r/whohoo/mcp-server-weibo)
+
+Based on the `python:alpine` image, runs natively without uv.
+
+### Other Notes
+
+1. After adding third-party libraries via `uv add`, use `uv pip freeze --exclude-editable > requirements.txt` to export dependencies. The Docker image uses `requirements.txt` to install dependencies.
+2. Local build command: `docker build -f Dockerfile-alpine -t whohoo/mcp-server-weibo:latest .`
+3. Debug inside container: `docker run -it --rm -p 4200:4200 whohoo/mcp-server-weibo:latest ash`

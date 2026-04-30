@@ -4,5 +4,9 @@ services:
     image: whohoo/mcp-server-weibo
     container_name: mcp-server-weibo
     restart: unless-stopped
+    volumes:
+      - ./logs:/app/logs
     ports:
       - "4200:4200"
+    #environment: # Uncomment and set environment variables if needed
+    #  - PORT=4200 # default is 4200, change if you want to use a different port
